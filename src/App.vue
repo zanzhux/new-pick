@@ -1,31 +1,37 @@
 <template>
   <div id="app">
-    <h1>职位的增删改查</h1>
+    <h1>管理录入</h1>
     <div class="head">
       <el-row :gutter="20">
-        <el-col :span="6">
+        <el-col :span="4">
           <el-input
             v-model="userInfo.name"
-            placeholder="请输入你的公司名"
+            placeholder="请输入你的供应商名"
           ></el-input>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <el-input
             v-model="userInfo.position"
-            placeholder="请输入你的职位"
+            placeholder="请输入你的地址"
           ></el-input>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <el-input
-            v-model="userInfo.major"
-            placeholder="请输入你的专业"
+            v-model="userInfo.phone"
+            placeholder="请输入你的电话"
           ></el-input>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <el-input
             v-model="userInfo.number"
             placeholder="请输入数量"
           ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="userInfo.major" placeholder="是否入库"></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="userInfo.PickNotAny" placeholder="备注"></el-input>
         </el-col>
       </el-row>
       <el-button type="primary" @click="addUser" class="add-btn" plain
@@ -36,20 +42,17 @@
     <div class="body">
       <template>
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column label="序号" width="180"
-            ><template slot-scope="scope">
-              {{ scope.$index + 1 }}
-            </template></el-table-column
-          >
+          <el-table-column prop="number" label="数量" width="180"></el-table-column>
           <el-table-column
-            prop="name"
-            label="公司名"
+            prop="position"
+            label="地址"
             width="180"
           ></el-table-column>
-          <el-table-column prop="position" label="职位"></el-table-column>
-          <el-table-column prop="major" label="专业"></el-table-column>
-          <el-table-column prop="number" label="数量"></el-table-column>
-          <el-table-column prop="birthday" label="操作">
+          <el-table-column prop="name" label="联系人"></el-table-column>
+          <el-table-column prop="phone" label="电话"></el-table-column>
+          <el-table-column prop="number" label="状态"></el-table-column>
+          <el-table-column prop="PickNotAny" label="备注"></el-table-column>
+          <el-table-column prop="position" label="操作">
             <template slot-scope="scope">
               <el-button
                 type="primary"
@@ -77,17 +80,23 @@
     >
       <div>
         <el-form ref="form" :model="editObj" label-width="80px">
-          <el-form-item label="公司名"
-            ><el-input v-model="editObj.name"></el-input
-          ></el-form-item>
-          <el-form-item label="职位"
-            ><el-input v-model="editObj.position"></el-input
-          ></el-form-item>
-          <el-form-item label="专业"
-            ><el-input v-model="editObj.major"></el-input
-          ></el-form-item>
           <el-form-item label="数量"
             ><el-input v-model="editObj.number"></el-input
+          ></el-form-item>
+          <el-form-item label="地址"
+            ><el-input v-model="editObj.position"></el-input
+          ></el-form-item>
+          <el-form-item label="联系人"
+            ><el-input v-model="editObj.name"></el-input
+          ></el-form-item>
+          <el-form-item label="电话"
+            ><el-input v-model="editObj.phone"></el-input
+          ></el-form-item>
+          <el-form-item label="状态"
+            ><el-input v-model="editObj.number"></el-input
+          ></el-form-item>
+          <el-form-item label="备注"
+            ><el-input v-model="editObj.PickNotAny"></el-input
           ></el-form-item>
         </el-form>
       </div>
@@ -108,108 +117,115 @@ export default {
         position: "",
         major: "",
         number: "",
+        phone: "",
+        PickNotAny: "",
       },
       tableData: [
         {
-          name: "互联网+学院",
-          position: "专职教师",
+          name: "互联网",
+          position: "北京",
+          phone: "123456788",
+          PickNotAny: "",
           major: "对外贸易",
-          number: "2",
+          number: "未入库",
         },
         {
-          name: "徐州重工",
-          position: "工厂车研发部工程师",
-          major: "精密机械制造",
-          number: "12",
+          name: "互联网",
+          position: "北京",
+          phone: "123456788",
+          PickNotAny: "",
+          major: "对外贸易",
+          number: "未入库",
         },
         {
-          name: "北京青码科技",
-          position: "前端开发工程师",
-          major: "Vue、React",
-          number: "4",
+          name: "互联网",
+          position: "北京",
+          phone: "123456788",
+          PickNotAny: "",
+          major: "对外贸易",
+          number: "未入库",
         },
       ],
       dialogVisible: false,
       editObj: {
         name: "",
-        position: "",
-        major: "",
-        number: "",
+          position: "",
+          phone: "",
+          PickNotAny: "",
+          major: "",
+          number: "",
       },
       userIndex: 0,
     };
   },
-  methods:{
-              //添加
-                addUser(){
-                    if(!this.userInfo.name){
-                        this.$message({
-                            message: '请输入你的公司名！',
-                            
-                        });
-                        return;
-                    }
-                    if(!this.userInfo.position){
-                        this.$message({
-                            message: '请输入你的职位！',
-                            type: 'warning'
-                        });
-                        return;
-                    }
-                    if (!this.userInfo.major) {
-                        this.$message({
-                            message: '请输入你的专业！',
-                            type: 'warning'
-                        });
-                        return;
-                    }
-                    if (!this.userInfo.number) {
-                        this.$message({
-                            message: '请输入数量！',
-                            type: 'warning'
-                        });
-                        return;
-                    }
-                    this.tableData.push(this.userInfo);
-                    this.userInfo = { 
-                        name:'',
-                        position: '',
-                        major: '',
-                        number: '',
-                    };
-                },
+  methods: {
+    //添加
+    addUser() {
+      if (!this.userInfo.name) {
+        this.$message({
+          message: "请输入你的供应商名！",
+        });
+        return;
+      }
+      if (!this.userInfo.position) {
+        this.$message({
+          message: "请输入你的地址！",
+          type: "warning",
+        });
+        return;
+      }
+      if (!this.userInfo.major) {
+        this.$message({
+          message: "请输入你的电话！",
+          type: "warning",
+        });
+        return;
+      }
+      if (!this.userInfo.number) {
+        this.$message({
+          message: "请输入数量！",
+          type: "warning",
+        });
+        return;
+      }
+      this.tableData.push(this.userInfo);
+      this.userInfo = {
+        name: "",
+        position: "",
+        major: "",
+        number: "",
+      };
+    },
 
-                //删除
-                delUser(idx){
-                    this.$confirm('确认删除此用户信息？')
-                        .then(_ => {
-                            this.tableData.splice(idx, 1);
-                        })
-                        .catch(_ => {});
-                },
-                //编辑
-                editUser(item,idx){
-                    this.userIndex = idx;
-                    this.editObj = {
-                        name: item.name,
-                        position: item.position,
-                        major: item.major,
-                        number: item.number,
-                    };
-                    this.dialogVisible = true;
-                },
+    //删除
+    delUser(idx) {
+      this.$confirm("确认删除此用户信息？")
+        .then((_) => {
+          this.tableData.splice(idx, 1);
+        })
+        .catch((_) => {});
+    },
+    //编辑
+    editUser(item, idx) {
+      this.userIndex = idx;
+      this.editObj = {
+        name: item.name,
+        position: item.position,
+        major: item.major,
+        number: item.number,
+      };
+      this.dialogVisible = true;
+    },
 
-                handleClose(){
-                    this.dialogVisible = false;
-                },
+    handleClose() {
+      this.dialogVisible = false;
+    },
 
-                confirm(){
-                    this.dialogVisible = false;
-                    Vue.set(this.tableData, this.userIndex, this.editObj);
-                        }
-                    },
-
-              
+    confirm() {
+      this.dialogVisible = false;
+      Vue.set(this.tableData, this.userIndex, this.editObj);
+    },
+  },
 };
 </script>
 <style>
