@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>管理录入</h1>
+    <h1>供应商管理功能</h1>
     <div class="head">
       <el-row :gutter="20">
         <el-col :span="4">
